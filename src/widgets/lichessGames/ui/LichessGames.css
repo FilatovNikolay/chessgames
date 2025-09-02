@@ -1,0 +1,856 @@
+/* components/LichessGames.css */
+.lichess-container {
+    padding: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+    font-family: "Arial", sans-serif;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 30px;
+}
+
+.header h1 {
+    color: #2c3e50;
+    margin-bottom: 20px;
+    font-size: 2.5rem;
+}
+
+.search-form {
+    margin-bottom: 20px;
+}
+
+.input-group {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 15px;
+}
+
+.username-input {
+    padding: 12px 16px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    width: 300px;
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.3s;
+}
+
+.username-input:focus {
+    border-color: #3498db;
+}
+
+.search-button {
+    padding: 12px 24px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.search-button:hover:not(:disabled) {
+    background-color: #2980b9;
+}
+
+.search-button:disabled {
+    background-color: #95a5a6;
+    cursor: not-allowed;
+}
+
+.format-selector {
+    margin-bottom: 15px;
+}
+
+.format-selector label {
+    margin-right: 10px;
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.format-select {
+    padding: 8px 12px;
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    font-size: 14px;
+    outline: none;
+}
+
+.format-description {
+    font-size: 14px;
+    color: #7f8c8d;
+    background-color: #f8f9fa;
+    padding: 10px;
+    border-radius: 6px;
+    max-width: 500px;
+    margin: 0 auto;
+}
+
+.loading-container {
+    text-align: center;
+    padding: 40px;
+    color: #7f8c8d;
+}
+
+.loading-text {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.error-container {
+    padding: 20px;
+    text-align: center;
+    background-color: #ffeaea;
+    border: 1px solid #f5c6cb;
+    border-radius: 8px;
+    margin-bottom: 20px;
+}
+
+.error-message {
+    color: #721c24;
+    margin-bottom: 15px;
+    font-size: 16px;
+}
+
+.retry-button {
+    padding: 10px 20px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.games-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.games-header h2 {
+    color: #2c3e50;
+    margin: 0;
+}
+
+.username {
+    color: #3498db;
+    margin-left: 8px;
+}
+
+.view-controls {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.refresh-button {
+    padding: 8px 16px;
+    background-color: #27ae60;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.view-button {
+    padding: 8px 16px;
+    background-color: #95a5a6;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.view-button.active {
+    background-color: #3498db;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 40px;
+    color: #7f8c8d;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+}
+
+.empty-icon {
+    font-size: 24px;
+    margin-bottom: 16px;
+}
+
+.empty-state h3 {
+    color: #2c3e50;
+    margin-bottom: 16px;
+}
+
+.games-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+
+.game-card {
+    padding: 20px;
+    border: 2px solid #e9ecef;
+    border-radius: 12px;
+    background-color: #ffffff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: box-shadow 0.3s;
+}
+
+.game-card:hover {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.game-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: start;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.game-header h3 {
+    margin: 0;
+    font-size: 16px;
+    color: #2c3e50;
+    font-weight: bold;
+}
+
+.game-speed {
+    font-size: 12px;
+    color: #ffffff;
+    background-color: #6c757d;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-weight: bold;
+}
+
+.players-info {
+    margin-bottom: 16px;
+}
+
+.player-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px;
+    background-color: #f8f9fa;
+    border-radius: 6px;
+    margin-bottom: 8px;
+}
+
+.player-name {
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.player-rating {
+    font-weight: bold;
+}
+
+.rating-diff.positive {
+    color: #27ae60;
+    margin-left: 6px;
+    font-size: 12px;
+}
+
+.rating-diff.negative {
+    color: #e74c3c;
+    margin-left: 6px;
+    font-size: 12px;
+}
+
+.game-result {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px;
+    background-color: #fff;
+    border-radius: 8px;
+    border: 2px solid #e9ecef;
+    margin-bottom: 16px;
+}
+
+.result-badge {
+    font-weight: bold;
+    font-size: 14px;
+    padding: 4px 12px;
+    border-radius: 15px;
+}
+
+.result-badge.white {
+    color: #27ae60;
+    background-color: #d5f4e6;
+}
+
+.result-badge.black {
+    color: #e74c3c;
+    background-color: #fadbd8;
+}
+
+.result-badge.draw {
+    color: #f39c12;
+    background-color: #fef9e7;
+}
+
+.game-time {
+    font-size: 12px;
+    color: #6c757d;
+    font-weight: 500;
+}
+
+.game-actions {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    margin-bottom: 16px;
+}
+
+.toggle-button {
+    padding: 8px 16px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.toggle-button.active {
+    background-color: #e74c3c;
+}
+
+.toggle-button:disabled {
+    cursor: not-allowed;
+    opacity: 0.7;
+}
+
+.analysis-button {
+    padding: 8px 12px;
+    background-color: #9b59b6;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.download-button {
+    padding: 8px 12px;
+    background-color: #27ae60;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+}
+
+.pgn-container {
+    margin-top: 16px;
+    padding: 16px;
+    border: 2px solid #dee2e6;
+    border-radius: 8px;
+    font-size: 12px;
+    white-space: pre-wrap;
+    max-height: 400px;
+    overflow: auto;
+    line-height: 1.4;
+}
+
+.pgn-container.games {
+    background-color: #fff;
+    font-family: monospace;
+}
+
+.pgn-container.json {
+    background-color: #f8f9fa;
+    font-size: 13px;
+}
+
+.error-text {
+    color: #e74c3c;
+    text-align: center;
+}
+
+.welcome-state {
+    text-align: center;
+    color: #7f8c8d;
+    margin-top: 60px;
+    padding: 40px;
+}
+
+.welcome-icon {
+    font-size: 24px;
+    margin-bottom: 16px;
+}
+
+.welcome-state h3 {
+    color: #2c3e50;
+    margin-bottom: 16px;
+}
+
+.welcome-state p {
+    font-size: 16px;
+    max-width: 500px;
+    margin: 0 auto;
+    line-height: 1.5;
+}
+
+@media (max-width: 768px) {
+    .input-group {
+        flex-direction: column;
+    }
+
+    .username-input {
+        width: 100%;
+        max-width: 300px;
+    }
+
+    .games-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .view-controls {
+        justify-content: center;
+    }
+
+    .game-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .game-result {
+        flex-direction: column;
+        gap: 10px;
+        text-align: center;
+    }
+}
+
+/* components/LichessGames.css */
+/* ... предыдущие стили остаются без изменений ... */
+
+.view-mode-button {
+    padding: 8px 12px;
+    background-color: #f39c12;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 12px;
+}
+
+.view-mode-button:hover {
+    background-color: #e67e22;
+}
+
+/* Стили для форматированного текста PGN */
+.pgn-container.games {
+    background-color: #fff;
+    font-family: "Courier New", monospace;
+    font-size: 13px;
+    line-height: 1.6;
+    white-space: pre-wrap;
+}
+
+.pgn-container.games .eval-positive {
+    color: #27ae60;
+    font-weight: bold;
+}
+
+.pgn-container.games .eval-negative {
+    color: #e74c3c;
+    font-weight: bold;
+}
+
+.pgn-container.games .clock-time {
+    color: #3498db;
+    font-weight: bold;
+}
+
+/* Адаптивные стили для мобильных устройств */
+@media (max-width: 768px) {
+    .view-controls {
+        flex-direction: column;
+        gap: 8px;
+    }
+
+    .view-button,
+    .view-mode-button,
+    .refresh-button {
+        width: 100%;
+        justify-content: center;
+    }
+
+    .pgn-container.games {
+        font-size: 11px;
+        padding: 12px;
+    }
+
+    .game-actions {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .toggle-button,
+    .analysis-button,
+    .download-button {
+        width: 100%;
+        justify-content: center;
+        margin-bottom: 5px;
+    }
+}
+
+@media (max-width: 480px) {
+    .header h1 {
+        font-size: 2rem;
+    }
+
+    .username-input {
+        width: 100%;
+        max-width: none;
+    }
+
+    .format-select {
+        width: 100%;
+    }
+
+    .games-header h2 {
+        font-size: 1.2rem;
+    }
+}
+
+/* components/LichessGames.css */
+/* Добавить эти стили в конец файла */
+
+/* Стили для форматированного PGN */
+.pgn-container.games {
+    background-color: #f8f9fa;
+    font-family: "Consolas", "Monaco", "Courier New", monospace;
+    font-size: 13px;
+    line-height: 1.6;
+    padding: 15px;
+    border-radius: 6px;
+    border-left: 4px solid #3498db;
+}
+
+.pgn-header {
+    margin-bottom: 15px;
+}
+
+.pgn-title {
+    font-weight: bold;
+    color: #2c3e50;
+    margin-bottom: 8px;
+    font-size: 14px;
+}
+
+.pgn-separator {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, #ddd, transparent);
+    margin: 10px 0;
+}
+
+.moves-container {
+    font-family: "Consolas", "Monaco", "Courier New", monospace;
+    line-height: 1.8;
+    text-align: left;
+}
+
+/* Стили для оценок */
+.eval {
+    font-weight: bold;
+    padding: 1px 4px;
+    border-radius: 3px;
+    margin: 0 2px;
+}
+
+.eval-very-good {
+    background-color: #27ae60;
+    color: white;
+}
+
+.eval-good {
+    background-color: #e6dfdf;
+    color: rgb(0, 0, 0);
+}
+
+.eval-slightly-good {
+    background-color: #d5f4e6;
+    color: #27ae60;
+}
+
+.eval-neutral {
+    background-color: #f39c12;
+    color: white;
+}
+
+.eval-slightly-bad {
+    background-color: #fadbd8;
+    color: #e74c3c;
+}
+
+.eval-bad {
+    background-color: #000000;
+    color: white;
+}
+
+.eval-very-bad {
+    background-color: #c0392b;
+    color: white;
+}
+
+/* Стили для времени */
+.clock {
+    color: #3498db;
+    font-weight: 500;
+}
+
+.time-spent {
+    color: #7f8c8d;
+    font-style: italic;
+    font-size: 11px;
+}
+
+/* Легенда */
+.pgn-legend {
+    margin-top: 15px;
+    padding: 12px;
+    background-color: #f8f9fa;
+    border-radius: 6px;
+    border: 1px solid #e9ecef;
+}
+
+.legend-item {
+    margin: 5px 0;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+}
+
+.legend-item .eval,
+.legend-item .clock,
+.legend-item .time-spent {
+    margin-right: 8px;
+    min-width: 40px;
+    text-align: center;
+}
+
+/* Компактный режим */
+.pgn-container.games.compact {
+    font-size: 12px;
+    padding: 10px;
+}
+
+.pgn-container.games.compact .moves-container {
+    line-height: 1.6;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .pgn-container.games {
+        font-size: 11px;
+        padding: 10px;
+    }
+
+    .moves-container {
+        line-height: 1.6;
+    }
+
+    .legend-item {
+        flex-wrap: wrap;
+    }
+}
+
+/* Убираем иконки из текста */
+.pgn-container.games .pgn-title::before,
+.pgn-container.games div::before {
+    display: none;
+}
+
+/* Выравнивание по левому краю */
+.pgn-container.games {
+    text-align: left;
+}
+
+.moves-container {
+    text-align: left;
+    direction: ltr;
+}
+
+/* components/LichessGames.css */
+/* Добавить эти стили */
+
+/* Стили для форматированного PGN */
+.pgn-container.games {
+    background-color: #f8f9fa;
+    font-family: "Consolas", "Monaco", "Courier New", monospace;
+    font-size: 13px;
+    line-height: 1.6;
+    padding: 15px;
+    border-radius: 6px;
+    border-left: 4px solid #3498db;
+    text-align: left;
+}
+
+.pgn-header {
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #e9ecef;
+}
+
+.pgn-info {
+    margin: 5px 0;
+}
+
+.pgn-label {
+    font-weight: bold;
+    color: #2c3e50;
+    min-width: 120px;
+    display: inline-block;
+}
+
+.pgn-moves-container {
+    font-family: "Consolas", "Monaco", "Courier New", monospace;
+    line-height: 2;
+    margin-top: 15px;
+}
+
+.move-number {
+    font-weight: bold;
+    color: #2c3e50;
+    margin-right: 5px;
+}
+
+.move {
+    font-weight: 500;
+}
+
+.analysis {
+    font-size: 11px;
+}
+
+.more-moves {
+    margin-top: 10px;
+    font-style: italic;
+    color: #7f8c8d;
+}
+
+/* Стили для оценок (белые - синие оттенки, черные - красные оттенки) */
+.eval {
+    font-weight: bold;
+    padding: 1px 4px;
+    border-radius: 3px;
+    margin: 0 2px;
+}
+
+/* Оценки в пользу белых */
+.eval-white-very-good {
+    background-color: #000000;
+    color: white;
+}
+
+.eval-white-good {
+    background-color: #181818;
+    color: white;
+}
+
+.eval-white-slightly-good {
+    background-color: #2f2f2f;
+    color: white;
+}
+
+/* Оценки в пользу черных */
+.eval-black-very-good {
+    background-color: #ffffff;
+    color: rgb(0, 0, 0);
+}
+
+.eval-black-good {
+    background-color: #eeeeee;
+    color: rgb(0, 0, 0);
+}
+
+.eval-black-slightly-good {
+    background-color: #dddddd;
+    color: #000000;
+}
+
+/* Нейтральная оценка */
+.eval-neutral {
+    background-color: #7f8c8d;
+    color: white;
+}
+
+/* Стили для времени */
+.time-spent {
+    color: #27ae60;
+    font-weight: 500;
+    font-size: 11px;
+}
+
+/* Компактный режим */
+.compact-header {
+    font-size: 14px;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+.compact-info {
+    margin: 3px 0;
+    font-size: 12px;
+    color: #7f8c8d;
+}
+
+.compact-moves {
+    margin-top: 10px;
+    line-height: 1.6;
+}
+
+.compact-move-number {
+    font-weight: bold;
+    color: #2c3e50;
+    margin-right: 3px;
+}
+
+.compact-move {
+    font-weight: 500;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .pgn-container.games {
+        font-size: 11px;
+        padding: 10px;
+    }
+
+    .pgn-label {
+        min-width: 100px;
+    }
+
+    .pgn-moves-container {
+        line-height: 1.8;
+    }
+}
