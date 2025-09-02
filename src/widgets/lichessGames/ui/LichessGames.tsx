@@ -7,11 +7,7 @@ import {
     getPlayerName,
     getPlayerRating,
 } from "@shared/utils/gameFormatters";
-import {
-    formatPgnForDisplay,
-    downloadPgn,
-    formatPgnCompact,
-} from "@shared/utils/pgnUtils";
+import { formatPgnForDisplay, formatPgnCompact } from "@shared/utils/pgnUtils";
 import {
     PgnFormat,
     getPgnOptions,
@@ -21,30 +17,29 @@ import "./LichessGames.css";
 import { useLichessGames } from "@shared/hooks/useLichessGames/useLichessGames";
 
 export const LichessGames: React.FC = () => {
-    const [inputUsername, setInputUsername] = useState("");
-    const [selectedFormat, setSelectedFormat] = useState<PgnFormat>("basic");
+    const [inputUsername, setInputUsername] = useState("Monkey_King");
+    const [selectedFormat, setSelectedFormat] =
+        useState<PgnFormat>("with-evals");
     const [loadingPgn, setLoadingPgn] = useState<{ [key: string]: boolean }>(
         {}
     );
     const [pgnData, setPgnData] = useState<{ [key: string]: string }>({});
-    const [expandedGame, setExpandedGame] = useState<string | null>(null);
-    const [activeView, setActiveView] = useState<"games" | "json">("games");
+    const [selectedGame, setSelectedGame] = useState<string | null>(null);
     const [viewMode, setViewMode] = useState<"detailed" | "compact">(
         "detailed"
     );
 
-    const { games, loading, error, refresh, fetchGamePgn, fetchGameAsJson } =
-        useLichessGames({
-            username: inputUsername,
-            maxGames: 15,
-        });
+    const { games, loading, error, refresh, fetchGamePgn } = useLichessGames({
+        username: inputUsername,
+        maxGames: 20,
+    });
 
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
         if (inputUsername.trim()) {
             refresh();
             setPgnData({});
-            setExpandedGame(null);
+            setSelectedGame(null);
         }
     };
 
@@ -53,103 +48,34 @@ export const LichessGames: React.FC = () => {
         format: PgnFormat = selectedFormat
     ) => {
         setLoadingPgn((prev) => ({ ...prev, [gameId]: true }));
-        setActiveView("games");
 
         try {
             const options = getPgnOptions(format);
             const pgn = await fetchGamePgn(gameId, options);
             setPgnData((prev) => ({ ...prev, [gameId]: pgn }));
-            setExpandedGame(gameId);
+            setSelectedGame(gameId);
         } catch (err) {
             console.error("Failed to fetch PGN:", err);
             setPgnData((prev) => ({
                 ...prev,
-                [gameId]: "❌ Не удалось загрузить PGN",
+                [gameId]: "Не удалось загрузить PGN",
             }));
         } finally {
             setLoadingPgn((prev) => ({ ...prev, [gameId]: false }));
         }
     };
 
-    const handleFetchJson = async (gameId: string) => {
-        setLoadingPgn((prev) => ({ ...prev, [gameId]: true }));
-        setActiveView("json");
-
-        try {
-            const jsonData = await fetchGameAsJson(gameId);
-            const jsonText = JSON.stringify(
-                {
-                    id: jsonData.id,
-                    rated: jsonData.rated,
-                    variant: jsonData.variant,
-                    speed: jsonData.speed,
-                    perf: jsonData.perf,
-                    createdAt: jsonData.createdAt,
-                    status: jsonData.status,
-                    players: {
-                        white: {
-                            name: jsonData.players?.white?.user?.name,
-                            rating: jsonData.players?.white?.rating,
-                            ratingDiff: jsonData.players?.white?.ratingDiff,
-                            accuracy:
-                                jsonData.players?.white?.analysis?.accuracy,
-                        },
-                        black: {
-                            name: jsonData.players?.black?.user?.name,
-                            rating: jsonData.players?.black?.rating,
-                            ratingDiff: jsonData.players?.black?.ratingDiff,
-                            accuracy:
-                                jsonData.players?.black?.analysis?.accuracy,
-                        },
-                    },
-                    winner: jsonData.winner,
-                    clock: jsonData.clock,
-                    moves: jsonData.moves
-                        ? `Количество ходов: ${
-                              jsonData.moves.split(" ").length
-                          }`
-                        : "Нет ходов",
-                    pgnLength: jsonData.pgn
-                        ? `Длина PGN: ${jsonData.pgn.length} символов`
-                        : "Нет PGN",
-                },
-                null,
-                2
-            );
-
-            setPgnData((prev) => ({ ...prev, [gameId]: jsonText }));
-            setExpandedGame(gameId);
-        } catch (err) {
-            console.error("Failed to fetch JSON:", err);
-            setPgnData((prev) => ({
-                ...prev,
-                [gameId]: "❌ Не удалось загрузить JSON данные",
-            }));
-        } finally {
-            setLoadingPgn((prev) => ({ ...prev, [gameId]: false }));
-        }
-    };
-
-    const toggleGameExpansion = (gameId: string) => {
-        if (expandedGame === gameId) {
-            setExpandedGame(null);
-        } else {
-            if (activeView === "json") {
-                handleFetchJson(gameId);
-            } else {
-                handleFetchPgn(gameId);
-            }
+    const handleGameSelect = (gameId: string) => {
+        setSelectedGame(gameId);
+        if (!pgnData[gameId]) {
+            handleFetchPgn(gameId);
         }
     };
 
     const handleFormatChange = (format: PgnFormat) => {
         setSelectedFormat(format);
-        if (
-            expandedGame &&
-            pgnData[expandedGame] &&
-            !pgnData[expandedGame].includes("❌")
-        ) {
-            handleFetchPgn(expandedGame, format);
+        if (selectedGame && pgnData[selectedGame]) {
+            handleFetchPgn(selectedGame, format);
         }
     };
 
@@ -171,12 +97,12 @@ export const LichessGames: React.FC = () => {
     const renderPgnContent = (gameId: string) => {
         const pgn = pgnData[gameId];
 
-        if (pgn.includes("❌")) {
-            return <div className="error-text">{pgn}</div>;
+        if (!pgn) {
+            return <div className="loading-text">Загрузка...</div>;
         }
 
-        if (activeView === "json") {
-            return <pre>{pgn}</pre>;
+        if (pgn.includes("Не удалось")) {
+            return <div className="error-text">{pgn}</div>;
         }
 
         if (viewMode === "detailed") {
@@ -245,239 +171,114 @@ export const LichessGames: React.FC = () => {
 
             {loading && (
                 <div className="loading-container">
-                    <div className="loading-text">⏳ Загрузка партий...</div>
-                    <div>Пожалуйста, подождите</div>
+                    <div className="loading-text">Загрузка партий...</div>
                 </div>
             )}
 
             {error && (
                 <div className="error-container">
-                    <div className="error-message">❌ {error}</div>
+                    <div className="error-message">{error}</div>
                     <button
                         onClick={refresh}
                         disabled={loading}
                         className="retry-button"
                     >
-                        🔄 Попробовать снова
+                        Попробовать снова
                     </button>
                 </div>
             )}
 
             {!loading && !error && inputUsername && (
-                <>
-                    <div className="games-header">
-                        <h2>
-                            Последние партии пользователя:{" "}
-                            <span className="username">{inputUsername}</span>
-                        </h2>
-
-                        <div className="view-controls">
-                            <button
-                                onClick={refresh}
-                                disabled={loading}
-                                className="refresh-button"
-                            >
-                                Обновить
-                            </button>
-
-                            <button
-                                onClick={() => setActiveView("games")}
-                                className={`view-button ${
-                                    activeView === "games" ? "active" : ""
-                                }`}
-                            >
-                                PGN
-                            </button>
-
-                            <button
-                                onClick={() => setActiveView("json")}
-                                className={`view-button ${
-                                    activeView === "json" ? "active" : ""
-                                }`}
-                            >
-                                JSON
-                            </button>
-
-                            {activeView === "games" && (
-                                <button
-                                    onClick={toggleViewMode}
-                                    className="view-mode-button"
-                                >
-                                    {viewMode === "detailed"
-                                        ? "Компактно"
-                                        : "Подробно"}
-                                </button>
-                            )}
-                        </div>
+                <div className="games-layout">
+                    {/* Список партий слева */}
+                    <div className="games-list">
+                        <h3>Партии пользователя: {inputUsername}</h3>
+                        {games.length === 0 ? (
+                            <div className="empty-state">
+                                <p>Партии не найдены</p>
+                            </div>
+                        ) : (
+                            <div className="games-column">
+                                {games.map((game: any) => (
+                                    <div
+                                        key={game.id}
+                                        className={`game-item ${
+                                            selectedGame === game.id
+                                                ? "selected"
+                                                : ""
+                                        }`}
+                                        onClick={() =>
+                                            handleGameSelect(game.id)
+                                        }
+                                    >
+                                        <div className="game-item-header">
+                                            <span className="game-id">
+                                                #{game.id?.slice(0, 8)}
+                                            </span>
+                                            <span className="game-speed">
+                                                {game.speed || "unknown"}
+                                            </span>
+                                        </div>
+                                        <div className="game-players">
+                                            {getPlayerName(game.players?.white)}{" "}
+                                            vs{" "}
+                                            {getPlayerName(game.players?.black)}
+                                        </div>
+                                        <div className="game-result-time">
+                                            <span
+                                                className={`result ${
+                                                    game.winner || "draw"
+                                                }`}
+                                            >
+                                                {getGameResult(game)}
+                                            </span>
+                                            <span className="game-time">
+                                                {formatGameTime(game.createdAt)}
+                                            </span>
+                                        </div>
+                                    </div>
+                                ))}
+                            </div>
+                        )}
                     </div>
 
-                    {games.length === 0 ? (
-                        <div className="empty-state">
-                            <div className="empty-icon">🤔</div>
-                            <h3>Партии не найдены</h3>
-                            <p>
-                                Возможно, пользователь не играл recently или имя
-                                введено неверно
-                            </p>
-                        </div>
-                    ) : (
-                        <div className="games-list">
-                            {games.map((game: any) => (
-                                <div key={game.id} className="game-card">
-                                    <div className="game-header">
-                                        <h3>
-                                            🎮 Партия #
-                                            {game.id?.slice(0, 8) || "unknown"}
-                                        </h3>
-                                        <span className="game-speed">
-                                            {game.speed || "unknown"}
-                                        </span>
-                                    </div>
-
-                                    <div className="players-info">
-                                        <div className="player-row white-player">
-                                            <span className="player-name">
-                                                ⚪{" "}
-                                                {getPlayerName(
-                                                    game.players?.white
-                                                )}
-                                            </span>
-                                            <span className="player-rating">
-                                                {getPlayerRating(
-                                                    game.players?.white
-                                                )}
-                                                {game.players?.white
-                                                    ?.ratingDiff !==
-                                                    undefined && (
-                                                    <span
-                                                        className={`rating-diff ${
-                                                            game.players.white
-                                                                .ratingDiff > 0
-                                                                ? "positive"
-                                                                : "negative"
-                                                        }`}
-                                                    >
-                                                        (
-                                                        {formatRatingDiff(
-                                                            game.players.white
-                                                                .ratingDiff
-                                                        )}
-                                                        )
-                                                    </span>
-                                                )}
-                                            </span>
-                                        </div>
-
-                                        <div className="player-row black-player">
-                                            <span className="player-name">
-                                                ⚫{" "}
-                                                {getPlayerName(
-                                                    game.players?.black
-                                                )}
-                                            </span>
-                                            <span className="player-rating">
-                                                {getPlayerRating(
-                                                    game.players?.black
-                                                )}
-                                                {game.players?.black
-                                                    ?.ratingDiff !==
-                                                    undefined && (
-                                                    <span
-                                                        className={`rating-diff ${
-                                                            game.players.black
-                                                                .ratingDiff > 0
-                                                                ? "positive"
-                                                                : "negative"
-                                                        }`}
-                                                    >
-                                                        (
-                                                        {formatRatingDiff(
-                                                            game.players.black
-                                                                .ratingDiff
-                                                        )}
-                                                        )
-                                                    </span>
-                                                )}
-                                            </span>
-                                        </div>
-                                    </div>
-
-                                    <div className="game-result">
-                                        <span
-                                            className={`result-badge ${
-                                                game.winner || "draw"
-                                            }`}
-                                        >
-                                            {getGameResult(game)}
-                                        </span>
-
-                                        <span className="game-time">
-                                            {formatGameTime(game.createdAt)}
-                                        </span>
-                                    </div>
-
-                                    <div className="game-actions">
-                                        <button
-                                            onClick={() =>
-                                                toggleGameExpansion(game.id)
-                                            }
-                                            disabled={loadingPgn[game.id]}
-                                            className={`toggle-button ${
-                                                expandedGame === game.id
-                                                    ? "active"
-                                                    : ""
-                                            }`}
-                                        >
-                                            {loadingPgn[game.id]
-                                                ? "⏳"
-                                                : expandedGame === game.id
-                                                ? "Скрыть"
-                                                : activeView === "json"
-                                                ? "JSON"
-                                                : "PGN"}
-                                            {loadingPgn[game.id] &&
-                                                " Загрузка..."}
-                                        </button>
-
-                                        {activeView === "games" && (
-                                            <button
-                                                onClick={() =>
-                                                    handleFetchPgn(
-                                                        game.id,
-                                                        "with-analysis"
-                                                    )
-                                                }
-                                                disabled={loadingPgn[game.id]}
-                                                className="analysis-button"
-                                            >
-                                                С анализом
-                                            </button>
-                                        )}
-                                    </div>
-
-                                    {expandedGame === game.id &&
-                                        pgnData[game.id] && (
-                                            <div
-                                                className={`pgn-container ${activeView}`}
-                                            >
-                                                {renderPgnContent(game.id)}
-                                            </div>
-                                        )}
+                    {/* Детали партии справа */}
+                    <div className="game-details">
+                        {selectedGame ? (
+                            <div className="details-container">
+                                <div className="details-header">
+                                    <h3>Детали партии</h3>
+                                    <button
+                                        onClick={toggleViewMode}
+                                        className="view-mode-button"
+                                    >
+                                        {viewMode === "detailed"
+                                            ? "Компактно"
+                                            : "Подробно"}
+                                    </button>
                                 </div>
-                            ))}
-                        </div>
-                    )}
-                </>
+                                <div className="pgn-container">
+                                    {renderPgnContent(selectedGame)}
+                                </div>
+                            </div>
+                        ) : (
+                            <div className="no-selection">
+                                <p>
+                                    Выберите партию из списка для просмотра
+                                    деталей
+                                </p>
+                            </div>
+                        )}
+                    </div>
+                </div>
             )}
 
             {!inputUsername && !loading && (
                 <div className="welcome-state">
-                    <div className="welcome-icon">👑</div>
                     <h3>Добро пожаловать в Lichess Games Viewer</h3>
                     <p>
                         Введите имя пользователя Lichess выше, чтобы посмотреть
-                        его последние партии, получить PGN в разных форматах или
-                        скачать игры для анализа.
+                        его последние партии.
                     </p>
                 </div>
             )}
