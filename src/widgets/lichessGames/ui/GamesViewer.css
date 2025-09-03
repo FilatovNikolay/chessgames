@@ -1,0 +1,587 @@
+/* components/GamesViewer.css */
+.games-container {
+    padding: 20px;
+    max-width: 1600px;
+    margin: 0 auto;
+    font-family: "Arial", sans-serif;
+    min-height: 100vh;
+}
+
+.header {
+    text-align: center;
+    margin-bottom: 30px;
+    padding: 20px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.header h1 {
+    color: #2c3e50;
+    margin-bottom: 20px;
+    font-size: 2.2rem;
+}
+
+.search-form {
+    max-width: 600px;
+    margin: 0 auto;
+}
+
+.platform-selector {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+.platform-selector label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+    padding: 12px 20px;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    background: white;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.platform-selector label.active {
+    border-color: #3498db;
+    background-color: #e3f2fd;
+    color: #3498db;
+}
+
+.platform-selector label:hover {
+    border-color: #3498db;
+}
+
+.input-group {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 15px;
+}
+
+.username-input {
+    padding: 14px 18px;
+    border: 2px solid #ddd;
+    border-radius: 8px;
+    width: 350px;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+}
+
+.username-input:focus {
+    border-color: #3498db;
+    outline: none;
+}
+
+.search-button {
+    padding: 14px 28px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: 600;
+    transition: background-color 0.3s ease;
+}
+
+.search-button:hover:not(:disabled) {
+    background-color: #2980b9;
+}
+
+.search-button:disabled {
+    background-color: #95a5a6;
+    cursor: not-allowed;
+}
+
+/* Основной layout */
+.games-layout {
+    display: grid;
+    grid-template-columns: 400px 1fr;
+    gap: 20px;
+    min-height: 600px;
+}
+
+/* Левая колонка - список партий */
+.games-list-column {
+    background: white;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    height: fit-content;
+    max-height: 80vh;
+    overflow-y: auto;
+}
+
+.games-list-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #f8f9fa;
+}
+
+.games-list-header h3 {
+    margin: 0;
+    color: #2c3e50;
+    font-size: 1.3rem;
+}
+
+.platform-badge {
+    padding: 6px 12px;
+    background-color: #3498db;
+    color: white;
+    border-radius: 20px;
+    font-size: 12px;
+    font-weight: 600;
+}
+
+.games-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.game-item {
+    padding: 16px;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: white;
+}
+
+.game-item:hover {
+    border-color: #3498db;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.2);
+}
+
+.game-item.selected {
+    border-color: #3498db;
+    background-color: #e3f2fd;
+    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+}
+
+.game-item-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px;
+}
+
+.game-speed {
+    font-size: 12px;
+    color: #7f8c8d;
+    background-color: #ecf0f1;
+    padding: 4px 10px;
+    border-radius: 12px;
+    font-weight: 600;
+}
+
+.rated-badge {
+    font-size: 11px;
+    color: #27ae60;
+    background-color: #d5f4e6;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-weight: 600;
+}
+
+.game-players {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 10px;
+    font-weight: 500;
+}
+
+.player {
+    font-weight: 600;
+}
+
+.player.white {
+    color: #2c3e50;
+}
+
+.player.black {
+    color: #2c3e50;
+}
+
+.vs {
+    color: #7f8c8d;
+    font-size: 12px;
+}
+
+.game-result-time {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.result {
+    font-weight: bold;
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+}
+
+.result.white {
+    background-color: #d5f4e6;
+    color: #27ae60;
+}
+
+.result.black {
+    background-color: #fadbd8;
+    color: #e74c3c;
+}
+
+.result.draw {
+    background-color: #fef9e7;
+    color: #f39c12;
+}
+
+.game-time {
+    font-size: 12px;
+    color: #7f8c8d;
+}
+
+/* Правая колонка - детали партии */
+.game-details-column {
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    height: fit-content;
+    max-height: 80vh;
+}
+
+.game-details-panel {
+    padding: 20px;
+    height: 100%;
+}
+
+.details-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #f8f9fa;
+}
+
+.details-header h3 {
+    margin: 0;
+    color: #2c3e50;
+    font-size: 1.3rem;
+}
+
+.close-button {
+    padding: 6px 12px;
+    background: none;
+    border: 2px solid #ddd;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    color: #7f8c8d;
+    transition: all 0.3s ease;
+}
+
+.close-button:hover {
+    border-color: #e74c3c;
+    color: #e74c3c;
+}
+
+.details-content {
+    max-height: 600px;
+    overflow-y: auto;
+}
+
+.pgn-content pre {
+    font-family: "Consolas", "Monaco", "Courier New", monospace;
+    font-size: 13px;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 6px;
+    border: 1px solid #e9ecef;
+    margin: 0;
+}
+
+.no-selection {
+    text-align: center;
+    color: #7f8c8d;
+    padding: 40px 0;
+}
+
+/* Состояния загрузки и ошибок */
+.loading-container,
+.error-container,
+.empty-state,
+.welcome-state {
+    text-align: center;
+    padding: 40px;
+    background: white;
+    border-radius: 10px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    margin: 20px 0;
+}
+
+.loading-text {
+    color: #7f8c8d;
+    font-size: 16px;
+}
+
+.error-message {
+    color: #e74c3c;
+    margin-bottom: 15px;
+    font-size: 16px;
+}
+
+.retry-button {
+    padding: 10px 20px;
+    background-color: #3498db;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+/* Адаптивность */
+@media (max-width: 1200px) {
+    .games-layout {
+        grid-template-columns: 1fr;
+        gap: 20px;
+    }
+
+    .games-list-column {
+        max-height: 400px;
+    }
+}
+
+@media (max-width: 768px) {
+    .header {
+        padding: 15px;
+    }
+
+    .platform-selector {
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .input-group {
+        flex-direction: column;
+    }
+
+    .username-input {
+        width: 100%;
+        max-width: none;
+    }
+
+    .games-layout {
+        grid-template-columns: 1fr;
+    }
+
+    .game-players {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+    }
+
+    .vs {
+        display: none;
+    }
+}
+
+/* components/GamesViewer.css */
+/* Добавляем в конец файла */
+
+/* Стили для форматированного PGN */
+.pgn-header {
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #f8f9fa;
+}
+
+.pgn-info {
+    margin: 8px 0;
+    font-size: 14px;
+}
+
+.pgn-label {
+    font-weight: bold;
+    color: #2c3e50;
+    min-width: 140px;
+    display: inline-block;
+}
+
+.pgn-moves-container {
+    font-family: "Consolas", "Monaco", "Courier New", monospace;
+    font-size: 14px;
+    line-height: 1.8;
+    background: #f8f9fa;
+    padding: 15px;
+    border-radius: 6px;
+    border: 1px solid #e9ecef;
+}
+
+.move-number {
+    font-weight: bold;
+    color: #2c3e50;
+    margin-right: 5px;
+}
+
+.move {
+    font-weight: 500;
+    color: #2c3e50;
+}
+
+.analysis {
+    font-size: 12px;
+}
+
+.more-moves {
+    margin-top: 15px;
+    font-style: italic;
+    color: #7f8c8d;
+    font-size: 13px;
+}
+
+/* Стили для оценок */
+.eval {
+    font-weight: bold;
+    padding: 2px 6px;
+    border-radius: 4px;
+    margin: 0 3px;
+    font-size: 11px;
+}
+
+/* Оценки в пользу белых (светлый фон, темный текст) */
+.eval-white-very-good {
+    background-color: #d5f4e6;
+    color: #27ae60;
+}
+
+.eval-white-good {
+    background-color: #e8f8f5;
+    color: #2ecc71;
+}
+
+.eval-white-slightly-good {
+    background-color: #f4f6f7;
+    color: #3498db;
+}
+
+/* Оценки в пользу черных (темный фон, белый текст) */
+.eval-black-very-good {
+    background-color: #7d6608;
+    color: white;
+}
+
+.eval-black-good {
+    background-color: #b7950b;
+    color: white;
+}
+
+.eval-black-slightly-good {
+    background-color: #f1c40f;
+    color: #2c3e50;
+}
+
+/* Нейтральная оценка */
+.eval-neutral {
+    background-color: #7f8c8d;
+    color: white;
+}
+
+.clock {
+    color: #3498db;
+    font-weight: 500;
+    font-size: 11px;
+}
+
+/* Компактный режим */
+.compact-header {
+    font-size: 15px;
+    margin-bottom: 10px;
+    font-weight: bold;
+    color: #2c3e50;
+}
+
+.compact-info {
+    margin: 5px 0;
+    font-size: 13px;
+    color: #7f8c8d;
+}
+
+.compact-moves {
+    margin-top: 15px;
+    line-height: 1.6;
+    font-family: "Consolas", "Monaco", "Courier New", monospace;
+    font-size: 13px;
+}
+
+.compact-move-number {
+    font-weight: bold;
+    color: #2c3e50;
+    margin-right: 3px;
+}
+
+.compact-move {
+    font-weight: 500;
+}
+
+/* Контролы в деталях */
+.details-controls {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.view-mode-button {
+    padding: 6px 12px;
+    background-color: #95a5a6;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 12px;
+    transition: background-color 0.3s ease;
+}
+
+.view-mode-button:hover {
+    background-color: #7f8c8d;
+}
+
+/* Адаптивность для PGN */
+@media (max-width: 768px) {
+    .pgn-moves-container {
+        font-size: 12px;
+        padding: 10px;
+    }
+
+    .pgn-info {
+        font-size: 13px;
+    }
+
+    .pgn-label {
+        min-width: 120px;
+    }
+
+    .eval {
+        font-size: 10px;
+        padding: 1px 4px;
+    }
+
+    .clock {
+        font-size: 10px;
+    }
+}

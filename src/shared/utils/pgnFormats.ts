@@ -1,6 +1,6 @@
 // utils/pgnFormats.ts
 
-import { PgnOptions } from "@shared/hooks/useLichessGames/useLichessGames";
+import { PgnOptions } from "@shared/hooks/useLichessGames";
 
 export type PgnFormat =
     | "basic"
